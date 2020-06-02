@@ -1,8 +1,10 @@
 package cmpt276.as1.assignment2test;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.solver.LinearSystem;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +14,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -30,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         populateLensList();
         populateListView();
         registerClickCallback();
+        setupAddFABButton();
     }
     private void populateManager(){
         manager.add(new Lens("Canon", 1.8, 50));
@@ -78,7 +83,41 @@ public class MainActivity extends AppCompatActivity {
                 //Intent intent=new Intent(MainActivity.this,DoFCalculator.class);
                 Intent intent=DoFCalculator.makeIntent(MainActivity.this,thisLens);
                 startActivity(intent);
+
             }
         });
+    }
+    private void setupAddFABButton(){
+        FloatingActionButton fabAdd=findViewById(R.id.floatingActionButton);
+        fabAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MainActivity.this,"Add new Lens",Toast.LENGTH_SHORT).show();
+
+                Intent intentAdd = AddLenses.makeIntent2(MainActivity.this);
+                startActivityForResult(intentAdd,42);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode== Activity.RESULT_CANCELED){
+            return;
+        }
+
+        switch(requestCode){
+            case 42:
+                String makeAnswer=data.getStringExtra("answerMake");
+                int focalAnswer=data.getIntExtra("answerFocal",0);
+                double apertureAnswer=data.getDoubleExtra("answerAperture",0);
+                Lens answerTest=new Lens(makeAnswer,apertureAnswer,focalAnswer);
+                lenses.add(answerTest);
+                populateListView();
+                break;
+        }
+
     }
 }
