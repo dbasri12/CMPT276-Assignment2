@@ -3,12 +3,15 @@ package cmpt276.as1.assignment2test;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.solver.LinearSystem;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -26,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         populateManager();
         populateLensList();
         populateListView();
+        registerClickCallback();
     }
     private void populateManager(){
         manager.add(new Lens("Canon", 1.8, 50));
@@ -55,11 +59,26 @@ public class MainActivity extends AppCompatActivity {
             Lens currentLens=lenses.get(position);
 
             TextView theLens=(TextView) itemView.findViewById(R.id.listofLenses);
-            theLens.setText(currentLens.getName()+" F"+currentLens.getAperture()+" "+currentLens.getFocalLenght()+"mm ");
+            theLens.setText(currentLens.toString());
 
             return itemView;
             //return super.getView(position,convertView,parent);
         }
 
+    }
+    private void registerClickCallback(){
+        ListView listToClick=(ListView) findViewById(R.id.lenslist);
+        listToClick.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> paret,View viewClicked,int position,long id){
+                //TextView textView=(TextView) viewClicked;
+                Toast.makeText(MainActivity.this,"Calculate Depth of Field",Toast.LENGTH_SHORT).show();
+
+                Lens thisLens=lenses.get(position);
+                //Intent intent=new Intent(MainActivity.this,DoFCalculator.class);
+                Intent intent=DoFCalculator.makeIntent(MainActivity.this,thisLens);
+                startActivity(intent);
+            }
+        });
     }
 }
