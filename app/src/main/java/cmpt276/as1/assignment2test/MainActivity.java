@@ -26,6 +26,10 @@ public class MainActivity extends AppCompatActivity {
 
     private Manager manager=Manager.getInstance();
     private ArrayList<Lens> lenses= new ArrayList<Lens>();
+    private static final String EXTRA_NAME="the name of lens";
+    private static final String EXTRA_APERTURE="the maximum aperture";
+    private static final String EXTRA_FOCAL="the focal length";
+    private int indexP;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,9 +84,10 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this,"Calculate Depth of Field",Toast.LENGTH_SHORT).show();
 
                 Lens thisLens=lenses.get(position);
+                indexP=position;
                 //Intent intent=new Intent(MainActivity.this,DoFCalculator.class);
                 Intent intent=DoFCalculator.makeIntent(MainActivity.this,thisLens);
-                startActivity(intent);
+                startActivityForResult(intent,43);
 
             }
         });
@@ -117,6 +122,21 @@ public class MainActivity extends AppCompatActivity {
                 lenses.add(answerTest);
                 populateListView();
                 break;
+            case 43:
+                String make = data.getStringExtra(EXTRA_NAME);
+                int focal = data.getIntExtra(EXTRA_FOCAL, 0);
+                double aperture = data.getDoubleExtra(EXTRA_APERTURE, 0);
+                if(make==null){
+                    lenses.remove(indexP);
+                    populateListView();
+                    break;
+                }
+                else{
+                lenses.remove(indexP);
+                Lens lensAns = new Lens(make, aperture, focal);
+                lenses.add(lensAns);
+                populateListView();
+                break;}
         }
 
     }

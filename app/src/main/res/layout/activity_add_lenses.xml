@@ -26,6 +26,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:ems="10"
+        android:hint="ex: Canon"
         android:inputType="textPersonName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textMake" />
@@ -56,22 +57,26 @@
 
     <EditText
         android:id="@+id/editFocalNew"
-        android:layout_width="393dp"
-        android:layout_height="37dp"
+        android:layout_width="445dp"
+        android:layout_height="41dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
+        android:hint="ex: 200 for 200mm"
         android:inputType="numberDecimal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textFocalNew" />
 
     <EditText
         android:id="@+id/editApertureNew"
-        android:layout_width="388dp"
-        android:layout_height="38dp"
+        android:layout_width="442dp"
+        android:layout_height="42dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
+        android:hint="ex: 2.8 for F2.8"
         android:inputType="numberDecimal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textApertureNew" />

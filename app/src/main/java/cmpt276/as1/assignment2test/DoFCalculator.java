@@ -2,6 +2,7 @@ package cmpt276.as1.assignment2test;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -32,6 +34,8 @@ public class DoFCalculator extends AppCompatActivity {
         extractDataFromIntent();
         setupLensUsed();
         setupDoCalculateButton();
+        setupEditButton();
+        setupDeleteButton();
     }
     private void extractDataFromIntent() {
         Intent intent=getIntent();
@@ -51,6 +55,60 @@ public class DoFCalculator extends AppCompatActivity {
         intent.putExtra(EXTRA_APERTURE,lens.getAperture());
         return intent;
     }
+    private void setupDeleteButton() {
+        Button deleteBtn=(Button) findViewById(R.id.buttonDelete);
+        deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent();
+                //intent.putExtra(EXTRA_NAME,"delete");
+                //intent.putExtra(EXTRA_FOCAL,-1);
+                //intent.putExtra(EXTRA_APERTURE,-1);
+                setResult(Activity.RESULT_OK,intent);
+                finish();
+            }
+        });
+    }
+    private void setupEditButton() {
+        Button editBtn=(Button) findViewById(R.id.buttonEdit);
+        editBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intentEdit=AddLenses.makeIntentForEdit(DoFCalculator.this,myLens);
+                startActivityForResult(intentEdit,42);
+            }
+        });
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == Activity.RESULT_CANCELED) {
+            return;
+        }
+
+        switch (requestCode) {
+            case 42:
+                String make = data.getStringExtra(EXTRA_NAME);
+                int focal = data.getIntExtra(EXTRA_FOCAL,0);
+                double aperture = data.getDoubleExtra(EXTRA_APERTURE,0);
+                Lens answer = new Lens(make, aperture, focal);
+                myLens = answer;
+                setupLensUsed();
+                editedLens();
+                break;
+        }
+    }
+    private void editedLens(){
+        Intent intent=new Intent();
+        intent.putExtra(EXTRA_NAME,myLens.getName());
+        intent.putExtra(EXTRA_FOCAL,myLens.getFocalLenght());
+        intent.putExtra(EXTRA_APERTURE,myLens.getAperture());
+        setResult(Activity.RESULT_OK,intent);
+        //Toast.makeText(DoFCalculator.this,"Edited Succesfully",Toast.LENGTH_SHORT).show();
+        finish();
+    }
+
     private void setupDoCalculateButton() {
 
         Button calcBtn= (Button) findViewById(R.id.btnCalculate);
@@ -69,6 +127,11 @@ public class DoFCalculator extends AppCompatActivity {
                 String userDataAperture=userTextEntryAperture.getText().toString();
                 double userAperture=Double.parseDouble(userDataAperture);
 
+
+                //boolean check=true;
+                if(userCoC<=0||userDistance<=0||userAperture<1.4)
+                    Toast.makeText(DoFCalculator.this,"Invalid input",Toast.LENGTH_SHORT).show();
+                else{
                 if(userAperture<myLens.getAperture()){
                     TextView textAnsHFocal=(TextView) findViewById(R.id.textResultHyperFocal);
                     textAnsHFocal.setText("Invalid Aperture");
@@ -89,7 +152,7 @@ public class DoFCalculator extends AppCompatActivity {
                 TextView textAnsFarFP=(TextView) findViewById(R.id.textResultFarFP);
                 textAnsFarFP.setText(df2.format(answer.getFarFP()/1000)+"m ");
                 TextView textAnsDoF=(TextView) findViewById(R.id.textResultDOF);
-                textAnsDoF.setText(df2.format(answer.getDoF()/1000)+"m ");}
+                textAnsDoF.setText(df2.format(answer.getDoF()/1000)+"m ");}}
 
             }
         });
