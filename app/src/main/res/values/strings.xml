@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">assignment2test</string>
+    <string name="app_name">Depth of Field Calculator</string>
+    <string name="DoF_page">Calculate Depth of Field</string>
+    <string name="addLens">Lens Details</string>
 </resources>

@@ -1,11 +1,16 @@
 package cmpt276.as1.assignment2test;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,12 +36,33 @@ public class DoFCalculator extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_do_f_calculator);
+        Toolbar toolbar=findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         extractDataFromIntent();
         setupLensUsed();
         setupDoCalculateButton();
         setupEditButton();
         setupDeleteButton();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater=getMenuInflater();
+        inflater.inflate(R.menu.main_menu2,menu );
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case R.id.itemBack:
+                Intent intent=new Intent();
+                setResult(Activity.RESULT_CANCELED,intent);
+                finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void extractDataFromIntent() {
         Intent intent=getIntent();
         String nameLens=intent.getStringExtra(EXTRA_NAME);
@@ -61,9 +87,7 @@ public class DoFCalculator extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent();
-                //intent.putExtra(EXTRA_NAME,"delete");
-                //intent.putExtra(EXTRA_FOCAL,-1);
-                //intent.putExtra(EXTRA_APERTURE,-1);
+                Toast.makeText(DoFCalculator.this,"Lens deleted",Toast.LENGTH_SHORT).show();
                 setResult(Activity.RESULT_OK,intent);
                 finish();
             }
@@ -115,17 +139,32 @@ public class DoFCalculator extends AppCompatActivity {
         calcBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                double userCoC=0;
+                double userDistance=0;
+                double userAperture=0;
                 EditText userTextEntryCoC=(EditText) findViewById(R.id.editTextNumberDecimal4);
                 String userDataCoC=userTextEntryCoC.getText().toString();
-                double userCoC=Double.parseDouble(userDataCoC);
+                if(userDataCoC.length()==0)
+                    userCoC=0;
+                    //Toast.makeText(DoFCalculator.this,"Please enter a value to be computed",Toast.LENGTH_SHORT).show();
+                else
+                   userCoC=Double.parseDouble(userDataCoC);
 
                 EditText userTextEntryDistance=(EditText) findViewById(R.id.editTextNumberDecimal5);
                 String userDataDistance=userTextEntryDistance.getText().toString();
-                double userDistance=Double.parseDouble(userDataDistance);
+                if(userDataDistance.length()==0)
+                    userDistance=0;
+                    //Toast.makeText(DoFCalculator.this,"Please enter a value to be computed",Toast.LENGTH_SHORT).show();
+                else
+                    userDistance=Double.parseDouble(userDataDistance);
 
                 EditText userTextEntryAperture=(EditText)findViewById(R.id.editTextNumberDecimal6);
                 String userDataAperture=userTextEntryAperture.getText().toString();
-                double userAperture=Double.parseDouble(userDataAperture);
+                if(userDataAperture.length()==0)
+                    userAperture=0;
+                    //Toast.makeText(DoFCalculator.this,"Please enter a value to be computed",Toast.LENGTH_SHORT).show();
+                else
+                    userAperture=Double.parseDouble(userDataAperture);
 
 
                 //boolean check=true;

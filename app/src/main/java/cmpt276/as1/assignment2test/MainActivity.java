@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
@@ -40,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar toolbar=findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         loadData();
         if(lenses.size()==0){
             populateManager();
@@ -107,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> paret,View viewClicked,int position,long id){
                 //TextView textView=(TextView) viewClicked;
-                Toast.makeText(MainActivity.this,"Calculate Depth of Field",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this,"Calculate Depth of Field",Toast.LENGTH_SHORT).show();
 
                 Lens thisLens=lenses.get(position);
                 indexP=position;
@@ -123,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this,"Add new Lens",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this,"Add new Lens",Toast.LENGTH_SHORT).show();
 
                 Intent intentAdd = AddLenses.makeIntent2(MainActivity.this);
                 startActivityForResult(intentAdd,42);
@@ -141,9 +144,9 @@ public class MainActivity extends AppCompatActivity {
 
         switch(requestCode){
             case 42:
-                String makeAnswer=data.getStringExtra("answerMake");
-                int focalAnswer=data.getIntExtra("answerFocal",0);
-                double apertureAnswer=data.getDoubleExtra("answerAperture",0);
+                String makeAnswer=data.getStringExtra(EXTRA_NAME);
+                int focalAnswer=data.getIntExtra(EXTRA_FOCAL,0);
+                double apertureAnswer=data.getDoubleExtra(EXTRA_APERTURE,0);
                 Lens answerTest=new Lens(makeAnswer,apertureAnswer,focalAnswer);
                 lenses.add(answerTest);
                 saveData();

@@ -1,11 +1,15 @@
 package cmpt276.as1.assignment2test;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,12 +32,63 @@ public class AddLenses extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_lenses);
+        Toolbar toolbar=findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         setupDoSaveButton();
         setupCancelButton();
         if(checkEdit==false){
             extractDataFromIntent();
-            setupDoSaveButtonForEdit();
+            //setupDoSaveButtonForEdit();
         }
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater=getMenuInflater();
+        inflater.inflate(R.menu.main_menu,menu );
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        Intent intent=new Intent();
+        switch (item.getItemId()){
+            case R.id.itemBack:
+                setResult(Activity.RESULT_CANCELED,intent);
+                checkEdit=true;
+                finish();
+                return true;
+            case R.id.itemSave:
+                EditText userTextMake= (EditText) findViewById(R.id.editMake);
+                String userEntryMake=userTextMake.getText().toString();
+                int userFocal=0;
+                double userAperture=0;
+
+                EditText userTextFocal=(EditText) findViewById(R.id.editFocalNew);
+                String userEntryFocal=userTextFocal.getText().toString();
+                if(userEntryFocal.length()==0)
+                    Toast.makeText(AddLenses.this,"Invalid input",Toast.LENGTH_SHORT).show();
+                else
+                    userFocal= Integer.parseInt(userEntryFocal);
+
+                EditText userTextAperture=(EditText) findViewById(R.id.editApertureNew);
+                String userEntryAperture=userTextAperture.getText().toString();
+                if(userEntryAperture.length()==0)
+                    Toast.makeText(AddLenses.this,"Invalid input",Toast.LENGTH_SHORT).show();
+                else
+                    userAperture=Double.parseDouble(userEntryAperture);
+                checkEdit=true;
+                if(userEntryMake.length()==0 ||  userFocal<=0 || userAperture<=1.4){
+                    Toast.makeText(AddLenses.this,"Invalid input",Toast.LENGTH_SHORT).show();
+                    setResult(Activity.RESULT_CANCELED,intent);
+                }
+                else{
+                    intent.putExtra(EXTRA_NAME,userEntryMake);
+                    intent.putExtra(EXTRA_FOCAL,userFocal);
+                    intent.putExtra(EXTRA_APERTURE,userAperture);
+                    setResult(Activity.RESULT_OK,intent);
+                    finish();}
+        }
+        return super.onOptionsItemSelected(item);
     }
     private void extractDataFromIntent() {
         Intent intent=getIntent();
@@ -69,6 +124,7 @@ public class AddLenses extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent=new Intent();
                 setResult(Activity.RESULT_CANCELED,intent);
+                checkEdit=true;
                 finish();
             }
         });
@@ -81,44 +137,24 @@ public class AddLenses extends AppCompatActivity {
             public void onClick(View v) {
                 EditText userTextMake= (EditText) findViewById(R.id.editMake);
                 String userEntryMake=userTextMake.getText().toString();
+                int userFocal=0;
+                double userAperture=0;
 
                 EditText userTextFocal=(EditText) findViewById(R.id.editFocalNew);
                 String userEntryFocal=userTextFocal.getText().toString();
-                int userFocal= Integer.parseInt(userEntryFocal);
+                if(userEntryFocal.length()==0)
+                    userFocal=0;
+                    //Toast.makeText(AddLenses.this,"Invalid input",Toast.LENGTH_SHORT).show();
+                else
+                    userFocal= Integer.parseInt(userEntryFocal);
 
                 EditText userTextAperture=(EditText) findViewById(R.id.editApertureNew);
                 String userEntryAperture=userTextAperture.getText().toString();
-                double userAperture=Double.parseDouble(userEntryAperture);
-
-                Intent intent=new Intent();
-                if(userEntryMake.length()==0 ||  userFocal<=0 || userAperture<=1.4){
-                    Toast.makeText(AddLenses.this,"Invalid input",Toast.LENGTH_SHORT).show();
-                    setResult(Activity.RESULT_CANCELED,intent);
-                }
-                else{
-                intent.putExtra("answerMake",userEntryMake);
-                intent.putExtra("answerFocal",userFocal);
-                intent.putExtra("answerAperture",userAperture);
-                setResult(Activity.RESULT_OK,intent);
-                finish();}
-            }
-        });
-    }
-    private void setupDoSaveButtonForEdit(){
-        Button saveBtn=findViewById(R.id.buttonSave);
-        saveBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EditText userTextMake= (EditText) findViewById(R.id.editMake);
-                String userEntryMake=userTextMake.getText().toString();
-
-                EditText userTextFocal=(EditText) findViewById(R.id.editFocalNew);
-                String userEntryFocal=userTextFocal.getText().toString();
-                int userFocal= Integer.parseInt(userEntryFocal);
-
-                EditText userTextAperture=(EditText) findViewById(R.id.editApertureNew);
-                String userEntryAperture=userTextAperture.getText().toString();
-                double userAperture=Double.parseDouble(userEntryAperture);
+                if(userEntryAperture.length()==0)
+                    userAperture=0;
+                    //Toast.makeText(AddLenses.this,"Invalid input",Toast.LENGTH_SHORT).show();
+                else
+                    userAperture=Double.parseDouble(userEntryAperture);
                 checkEdit=true;
 
                 Intent intent=new Intent();
@@ -127,13 +163,12 @@ public class AddLenses extends AppCompatActivity {
                     setResult(Activity.RESULT_CANCELED,intent);
                 }
                 else{
-                    intent.putExtra(EXTRA_NAME,userEntryMake);
-                    intent.putExtra(EXTRA_FOCAL,userFocal);
-                    intent.putExtra(EXTRA_APERTURE,userAperture);
-                    setResult(Activity.RESULT_OK,intent);
-                    Toast.makeText(AddLenses.this,"Edited Succesfully",Toast.LENGTH_SHORT).show();
-                    finish();
-                    }
+                intent.putExtra(EXTRA_NAME,userEntryMake);
+                intent.putExtra(EXTRA_FOCAL,userFocal);
+                intent.putExtra(EXTRA_APERTURE,userAperture);
+                Toast.makeText(AddLenses.this,"Lens saved",Toast.LENGTH_SHORT).show();
+                setResult(Activity.RESULT_OK,intent);
+                finish();}
             }
         });
     }
