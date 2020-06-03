@@ -6,6 +6,7 @@ import androidx.constraintlayout.solver.LinearSystem;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import cmpt276.as1.assignment2test.model.Manager;
@@ -29,13 +33,18 @@ public class MainActivity extends AppCompatActivity {
     private static final String EXTRA_NAME="the name of lens";
     private static final String EXTRA_APERTURE="the maximum aperture";
     private static final String EXTRA_FOCAL="the focal length";
+    private static final String SHARED_P="shared preferences";
+    private static final String task_list="task list";
     private int indexP;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        populateManager();
-        populateLensList();
+        loadData();
+        if(lenses.size()==0){
+            populateManager();
+            populateLensList();
+        }
         populateListView();
         registerClickCallback();
         setupAddFABButton();
@@ -48,13 +57,30 @@ public class MainActivity extends AppCompatActivity {
     }
     private void populateLensList(){
         for(int i=0;i<4;i++)
-            lenses.add(manager.get(i));
+           lenses.add(manager.get(i));
     }
     private void populateListView(){
         ArrayAdapter<Lens> adapter=new MyListAdapter();
         ListView list=(ListView)findViewById(R.id.lenslist);
         list.setAdapter(adapter);
     }
+    private void saveData() {
+        SharedPreferences sharedPreferences=getSharedPreferences(SHARED_P,MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        Gson gson=new Gson();
+        String json = gson.toJson(lenses);
+        editor.putString(task_list,json);
+        editor.apply();
+    }
+    private void loadData() {
+        SharedPreferences sharedPreferences=getSharedPreferences(SHARED_P,MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json=sharedPreferences.getString(task_list,null);
+        Type type=new TypeToken<ArrayList<Lens>>(){}.getType();
+        lenses=gson.fromJson(json,type);
+
+    }
+
     private class MyListAdapter extends ArrayAdapter<Lens>{
         public MyListAdapter(){
             super(MainActivity.this,R.layout.lens_item,lenses);
@@ -120,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
                 double apertureAnswer=data.getDoubleExtra("answerAperture",0);
                 Lens answerTest=new Lens(makeAnswer,apertureAnswer,focalAnswer);
                 lenses.add(answerTest);
+                saveData();
                 populateListView();
                 break;
             case 43:
@@ -128,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
                 double aperture = data.getDoubleExtra(EXTRA_APERTURE, 0);
                 if(make==null){
                     lenses.remove(indexP);
+                    saveData();
                     populateListView();
                     break;
                 }
@@ -135,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
                 lenses.remove(indexP);
                 Lens lensAns = new Lens(make, aperture, focal);
                 lenses.add(lensAns);
+                saveData();
                 populateListView();
                 break;}
         }

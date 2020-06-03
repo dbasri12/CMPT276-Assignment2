@@ -14,6 +14,9 @@ public class Manager {
         public void add(Lens x){
                 lens.add(x);
         }
+        public void remove(int x){
+                lens.remove(x);
+        }
         public Lens get(int index){
                 Lens ans=new Lens("error", 0, 0);
                 for(int i=0;i<lens.size();i++){
