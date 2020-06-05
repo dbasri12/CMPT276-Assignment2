@@ -36,7 +36,7 @@ public class AddLenses extends AppCompatActivity {
         setSupportActionBar(toolbar);
         setupDoSaveButton();
         setupCancelButton();
-        if(checkEdit==false){
+        if(checkEdit==false){//to see if its called by 'Edit Lens' or 'Add new Lens'
             extractDataFromIntent();
         }
     }
@@ -102,17 +102,18 @@ public class AddLenses extends AppCompatActivity {
         EditText userFocal=(EditText) findViewById(R.id.editFocalNew);
         userFocal.setText(df2.format(myLens.getFocalLenght()));
     }
-
+    //take data from Main Activity when called by  Add lenses
     public static Intent makeIntent2(Context c){
         Intent intent =new Intent(c,AddLenses.class);
         return intent;
     }
+    //take data from DofCalculator when called by Edit lenses
     public static Intent makeIntentForEdit(Context context, Lens lens){
         Intent intent=new Intent(context,AddLenses.class);
         intent.putExtra(EXTRA_NAME,lens.getName());
         intent.putExtra(EXTRA_FOCAL,lens.getFocalLenght());
         intent.putExtra(EXTRA_APERTURE,lens.getAperture());
-        checkEdit=false;
+        checkEdit=false; //notify that this activity is called by Edit Lens
         return intent;
     }
 
@@ -142,7 +143,7 @@ public class AddLenses extends AppCompatActivity {
                 EditText userTextFocal=(EditText) findViewById(R.id.editFocalNew);
                 String userEntryFocal=userTextFocal.getText().toString();
                 if(userEntryFocal.length()==0)
-                    userFocal=0;
+                    userFocal=0;//so the app won't crash when user click the button without specifying value
                 else
                     userFocal= Integer.parseInt(userEntryFocal);
 

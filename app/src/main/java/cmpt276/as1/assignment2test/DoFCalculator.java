@@ -70,6 +70,7 @@ public class DoFCalculator extends AppCompatActivity {
         int lensFocal=intent.getIntExtra(EXTRA_FOCAL,0);
         myLens=new Lens(nameLens,lensAperture,lensFocal);
     }
+    //for title at the very top
     private void setupLensUsed(){
         TextView textView=(TextView) findViewById(R.id.textView);
         textView.setText("Camera details: " + myLens.toString());

@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         switch(requestCode){
-            case 42:
+            case 42://first case when it was called by the FAB button,  return the saved lens
                 String makeAnswer=data.getStringExtra(EXTRA_NAME);
                 int focalAnswer=data.getIntExtra(EXTRA_FOCAL,0);
                 double apertureAnswer=data.getDoubleExtra(EXTRA_APERTURE,0);
@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
                 saveData();
                 populateListView();
                 break;
-            case 43:
+            case 43://second case called  by lists . when it returns null means delete the lens
                 String make = data.getStringExtra(EXTRA_NAME);
                 int focal = data.getIntExtra(EXTRA_FOCAL, 0);
                 double aperture = data.getDoubleExtra(EXTRA_APERTURE, 0);
