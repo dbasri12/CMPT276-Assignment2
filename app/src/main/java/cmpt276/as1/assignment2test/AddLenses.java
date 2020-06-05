@@ -38,7 +38,6 @@ public class AddLenses extends AppCompatActivity {
         setupCancelButton();
         if(checkEdit==false){
             extractDataFromIntent();
-            //setupDoSaveButtonForEdit();
         }
     }
     @Override
@@ -144,7 +143,6 @@ public class AddLenses extends AppCompatActivity {
                 String userEntryFocal=userTextFocal.getText().toString();
                 if(userEntryFocal.length()==0)
                     userFocal=0;
-                    //Toast.makeText(AddLenses.this,"Invalid input",Toast.LENGTH_SHORT).show();
                 else
                     userFocal= Integer.parseInt(userEntryFocal);
 
@@ -152,7 +150,6 @@ public class AddLenses extends AppCompatActivity {
                 String userEntryAperture=userTextAperture.getText().toString();
                 if(userEntryAperture.length()==0)
                     userAperture=0;
-                    //Toast.makeText(AddLenses.this,"Invalid input",Toast.LENGTH_SHORT).show();
                 else
                     userAperture=Double.parseDouble(userEntryAperture);
                 checkEdit=true;

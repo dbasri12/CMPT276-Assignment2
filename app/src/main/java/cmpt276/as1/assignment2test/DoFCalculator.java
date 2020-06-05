@@ -129,7 +129,6 @@ public class DoFCalculator extends AppCompatActivity {
         intent.putExtra(EXTRA_FOCAL,myLens.getFocalLenght());
         intent.putExtra(EXTRA_APERTURE,myLens.getAperture());
         setResult(Activity.RESULT_OK,intent);
-        //Toast.makeText(DoFCalculator.this,"Edited Succesfully",Toast.LENGTH_SHORT).show();
         finish();
     }
 
@@ -146,7 +145,6 @@ public class DoFCalculator extends AppCompatActivity {
                 String userDataCoC=userTextEntryCoC.getText().toString();
                 if(userDataCoC.length()==0)
                     userCoC=0;
-                    //Toast.makeText(DoFCalculator.this,"Please enter a value to be computed",Toast.LENGTH_SHORT).show();
                 else
                    userCoC=Double.parseDouble(userDataCoC);
 
@@ -154,7 +152,6 @@ public class DoFCalculator extends AppCompatActivity {
                 String userDataDistance=userTextEntryDistance.getText().toString();
                 if(userDataDistance.length()==0)
                     userDistance=0;
-                    //Toast.makeText(DoFCalculator.this,"Please enter a value to be computed",Toast.LENGTH_SHORT).show();
                 else
                     userDistance=Double.parseDouble(userDataDistance);
 
@@ -162,12 +159,9 @@ public class DoFCalculator extends AppCompatActivity {
                 String userDataAperture=userTextEntryAperture.getText().toString();
                 if(userDataAperture.length()==0)
                     userAperture=0;
-                    //Toast.makeText(DoFCalculator.this,"Please enter a value to be computed",Toast.LENGTH_SHORT).show();
                 else
                     userAperture=Double.parseDouble(userDataAperture);
 
-
-                //boolean check=true;
                 if(userCoC<=0||userDistance<=0||userAperture<1.4)
                     Toast.makeText(DoFCalculator.this,"Invalid input",Toast.LENGTH_SHORT).show();
                 else{

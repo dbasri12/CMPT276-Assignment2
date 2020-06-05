@@ -81,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
         String json=sharedPreferences.getString(task_list,null);
         Type type=new TypeToken<ArrayList<Lens>>(){}.getType();
         lenses=gson.fromJson(json,type);
-
     }
 
     private class MyListAdapter extends ArrayAdapter<Lens>{
@@ -100,7 +99,6 @@ public class MainActivity extends AppCompatActivity {
             theLens.setText(currentLens.toString());
 
             return itemView;
-            //return super.getView(position,convertView,parent);
         }
 
     }
@@ -109,12 +107,8 @@ public class MainActivity extends AppCompatActivity {
         listToClick.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> paret,View viewClicked,int position,long id){
-                //TextView textView=(TextView) viewClicked;
-                //Toast.makeText(MainActivity.this,"Calculate Depth of Field",Toast.LENGTH_SHORT).show();
-
                 Lens thisLens=lenses.get(position);
                 indexP=position;
-                //Intent intent=new Intent(MainActivity.this,DoFCalculator.class);
                 Intent intent=DoFCalculator.makeIntent(MainActivity.this,thisLens);
                 startActivityForResult(intent,43);
 
@@ -126,8 +120,6 @@ public class MainActivity extends AppCompatActivity {
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Toast.makeText(MainActivity.this,"Add new Lens",Toast.LENGTH_SHORT).show();
-
                 Intent intentAdd = AddLenses.makeIntent2(MainActivity.this);
                 startActivityForResult(intentAdd,42);
             }
